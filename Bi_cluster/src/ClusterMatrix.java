@@ -20,14 +20,15 @@ public class ClusterMatrix
     
     public static final String IMG_FILE_NAME = "Matrix.png";
     public static final String IMG2_FILE_NAME = "Result.png";
+    private static final int PIXEL_HEIGHT = 10;
 	
 	public ClusterMatrix(int[][] matrix)
 	{
 		this.matrix = matrix;
 		occInRows = new int[matrix.length];
 		occInColumns = new int[matrix[0].length];
-		img = new BufferedImage(matrix[0].length, matrix.length, BufferedImage.TYPE_INT_ARGB);
-	    img2 = new BufferedImage(matrix[0].length, matrix.length, BufferedImage.TYPE_INT_ARGB);
+		img = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+	    img2 = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	}
 	/**
 	 * Simply prints out the matrix
@@ -49,7 +50,16 @@ public class ClusterMatrix
 					b = 255;
 				}
 				int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel
-				img.setRGB(j-1, i-1, p);
+				for(int k = 0; k < PIXEL_HEIGHT; k++)
+				{
+					for(int l = k; l < PIXEL_HEIGHT; l++)
+					{
+						img.setRGB(PIXEL_HEIGHT*(j-1) + k, PIXEL_HEIGHT*(i-1) + l, p);
+						img.setRGB(PIXEL_HEIGHT*(j-1) + l, PIXEL_HEIGHT*(i-1) + k, p);
+					}
+					
+				}
+				
 			}
 			
 			try
@@ -61,7 +71,6 @@ public class ClusterMatrix
 		     {
 		       System.out.println("Error: " + e);
 		     }
-			System.out.println("");
 		}
 	}
 	

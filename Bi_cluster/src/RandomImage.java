@@ -4,7 +4,7 @@ public class RandomImage{
 	
   public static void main(String args[])throws IOException
   {
-	 int[][] matrix = new int[500][500];
+	 int[][] matrix = new int[30][30];
 	 for(int i = 0; i < matrix.length; i++)
 		{
 			for(int j = 0; j < matrix[i].length; j++)
