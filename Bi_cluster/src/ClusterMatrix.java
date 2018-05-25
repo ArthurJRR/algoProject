@@ -8,19 +8,13 @@ import javax.imageio.ImageIO;
  * @author Guillaume_2
  * In this class, we assume that the matrix is only filled with 0s and 1s
  */
-public class ClusterMatrix
+public class ClusterMatrix extends ParentMatrix
 {
-	
-	private int matrix[][];	
 	
 	private int[] occInRows;//The Key represents the number of the row, the value represents the number of 1 in this row
 	private int[] occInColumns;//The Key represents the number of the column, the value represents the number of 1 in this column
-	private BufferedImage img;
-    private BufferedImage img2;
     
-    public static final String IMG_FILE_NAME = "Matrix.png";
-    public static final String IMG2_FILE_NAME = "Result.png";
-    private static final int PIXEL_HEIGHT = 10;
+    
 	
 	public ClusterMatrix(int[][] matrix)
 	{
@@ -30,50 +24,6 @@ public class ClusterMatrix
 		img = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	    img2 = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	}
-	/**
-	 * Simply prints out the matrix
-	 */
-	public void saveMatrixOnImg(BufferedImage img, String fileName)
-	{
-		for(int i = 1; i <= matrix.length; i++)
-		{
-			for(int j = 1; j <= matrix[i-1].length; j++)
-			{
-				int a = 255;
-				int r = 0;
-				int g = 0;
-				int b = 0;
-				if(matrix[i-1][j-1] != 0)
-				{
-					r = 255;
-					g = 255;
-					b = 255;
-				}
-				int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel
-				for(int k = 0; k < PIXEL_HEIGHT; k++)
-				{
-					for(int l = k; l < PIXEL_HEIGHT; l++)
-					{
-						img.setRGB(PIXEL_HEIGHT*(j-1) + k, PIXEL_HEIGHT*(i-1) + l, p);
-						img.setRGB(PIXEL_HEIGHT*(j-1) + l, PIXEL_HEIGHT*(i-1) + k, p);
-					}
-					
-				}
-				
-			}
-			
-			try
-		     {
-		       File f = new File(fileName);
-		       ImageIO.write(img, "png", f);
-		     }
-		     catch(IOException e)
-		     {
-		       System.out.println("Error: " + e);
-		     }
-		}
-	}
-	
 	
 	
 	/**
@@ -200,14 +150,6 @@ public class ClusterMatrix
 		}
 	}
 	
-	
-	public BufferedImage getImg()
-	{
-		return img;
-	}
-	public BufferedImage getImg2()
-	{
-		return img2;
-	}
+
 	
 }
