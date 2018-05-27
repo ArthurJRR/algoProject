@@ -6,6 +6,7 @@ public class ChengChurch extends ParentMatrix
 	private int numberOfActiveColumns;
 	private int numberOfActiveRows;
 	private float threshold;
+	private float residuScoreMatrix;;
 	
 	public ChengChurch(int[][] matrix, float threshold)
 	{
@@ -13,6 +14,7 @@ public class ChengChurch extends ParentMatrix
 		this.threshold = threshold;
 		this.numberOfActiveRows = matrix.length;
 		this.numberOfActiveColumns = matrix[0].length;
+		this.residuScoreMatrix= calculateResiduScoreMatrix();
 		img = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	    img2 = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	}
@@ -68,7 +70,7 @@ public class ChengChurch extends ParentMatrix
 		float columnSubAverage = calculateColumnSubsetAverage(j);
 		float rowSubAverage = calculateRowSubsetAverage(i);
 		float subMatrixAverage = calculateSubmatrixAverage();
-		return matrix[i][j] - columnSubAverage - rowSubAverage + subMatrixAverage;
+		return element - columnSubAverage - rowSubAverage + subMatrixAverage;
 	}
 	
 	//correspond à H(I,J)
@@ -113,19 +115,19 @@ public class ChengChurch extends ParentMatrix
 	
 	public void deletionPhase()
 	{
-		float H = calculateResiduScoreMatrix();
+		residuScoreMatrix = calculateResiduScoreMatrix();
 		int maxRowIndex = 0;
 		float maxRowScore = 0;
 		
 		int maxColumnIndex = 0;
 		float maxColumnScore = 0;
-		System.out.println(H);
-		while(H > threshold)
+		System.out.println(residuScoreMatrix);
+		while(residuScoreMatrix > threshold)
 		{
 			for(int i = 0; i < numberOfActiveRows; i++)
 			{
 				float score = calculateRowResiduScore(i);
-				if(score > maxRowScore)
+				if(Math.exp(score) > Math.exp(maxRowScore))
 				{
 					maxRowScore = score;
 					maxRowIndex = i;
@@ -135,14 +137,14 @@ public class ChengChurch extends ParentMatrix
 			for(int j = 0; j < numberOfActiveColumns; j++)
 			{
 				float score = calculateColumnResiduScore(j);
-				if(score > maxColumnScore)
+				if(Math.exp(score) > Math.exp(maxColumnScore))
 				{
 					maxColumnScore = score;
 					maxColumnIndex = j;
 				}
 			}
 			
-			if(maxColumnScore > maxRowScore)
+			if(Math.exp(maxColumnScore) > Math.exp(maxRowScore))
 			{
 				swapColumns(maxColumnIndex, numberOfActiveColumns - 1);
 				numberOfActiveColumns -= 1;
@@ -153,8 +155,56 @@ public class ChengChurch extends ParentMatrix
 				numberOfActiveRows -= 1;
 			}
 			
-			H = calculateResiduScoreMatrix();
+			residuScoreMatrix = calculateResiduScoreMatrix();
 			
+		}
+	}
+	
+	public void additionPhase() {
+		/*int ghostNumberOfActiveColumns= numberOfActiveColumns;
+		int ghostNumberOfActiveRows= numberOfActiveRows;*/
+		
+		while(residuScoreMatrix<threshold) {//not sure
+			/*numberOfActiveColumns= ghostNumberOfActiveColumns;
+			numberOfActiveRows=ghostNumberOfActiveRows;*/
+			
+			float maxRowScore=-10;
+			int maxRowIndex=0;
+			
+			float maxColumnScore=-10;
+			int maxColumnIndex=0;
+			
+			for(int i = numberOfActiveRows; i < matrix.length; i++)
+			{
+				System.out.println("R"+i);
+				float score = calculateRowResiduScore(i);
+				System.out.println(score);
+				if(Math.exp(score) > Math.exp(maxRowScore))
+				{
+					maxRowScore = score;
+					maxRowIndex = i;
+				}
+			}
+			
+			for(int j = numberOfActiveColumns; j < matrix[0].length; j++)
+			{
+				System.out.println("V"+j);
+				float score = calculateColumnResiduScore(j);
+				System.out.println(score);
+				if(Math.exp(score) > Math.exp(maxColumnScore))
+				{
+					maxColumnScore = score;
+					maxColumnIndex = j;
+				}
+			}
+			if(Math.exp(maxColumnScore) > Math.exp(maxRowScore)) {
+				swapRows(maxRowIndex, numberOfActiveRows-1);//pas sûr du -1
+				numberOfActiveRows += 1;
+			}
+			else {
+				swapColumns(maxColumnIndex, numberOfActiveColumns-1);//pas sûr du -1
+				numberOfActiveColumns += 1;
+			}
 		}
 	}
 	
