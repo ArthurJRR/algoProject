@@ -105,6 +105,7 @@ public class ChengChurch extends ParentMatrix
 			result += calculateResiduScoreElement(i, j);
 		}
 		result = result / numberOfActiveRows;
+		//System.out.println("Score résidu de la colonne " + j + " : " + result);
 		return result;
 	}
 	
@@ -117,6 +118,7 @@ public class ChengChurch extends ParentMatrix
 			result += calculateResiduScoreElement(i, j);
 		}
 		result = result / numberOfActiveColumns;
+		//System.out.println("Score résidu de la ligne " + i + " : " + result);
 		return result;
 	}
 	
@@ -128,7 +130,7 @@ public class ChengChurch extends ParentMatrix
 		System.out.println(residuScoreMatrix);
 		while(residuScoreMatrix > threshold)
 		{
-			precalculateUsefulValues();
+			
 			int maxRowIndex = 0;
 			float maxRowScore = -10;
 			
@@ -165,6 +167,7 @@ public class ChengChurch extends ParentMatrix
 				numberOfActiveRows -= 1;
 			}
 			
+			precalculateUsefulValues();
 			residuScoreMatrix = calculateResiduScoreMatrix();
 			System.out.println("H " + residuScoreMatrix);
 			

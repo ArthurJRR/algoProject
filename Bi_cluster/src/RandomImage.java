@@ -39,10 +39,10 @@ public class RandomImage{
 
 	 int[][] mat = MatrixFromTextFileCreator.createMatrixFromFile("bicluster_yeast");
  
-	 ChengChurch cheng = new ChengChurch(matrix2, 0.1f);
+	 ChengChurch cheng = new ChengChurch(mat, 610f);
 	 cheng.saveMatrixOnImg(cheng.getImg(), "Initial_Cheng.png");
 	 cheng.deletionPhase();
-	 cheng.additionPhase();
+	 //cheng.additionPhase();
 	 cheng.saveMatrixOnImg(cheng.getImg2(), "After_cheng.png");
 	 System.out.println("Submatrix");
 	 System.out.println("");
@@ -57,13 +57,19 @@ public class RandomImage{
 			for(int j = 1; j <= sub[i-1].length; j++)
 			{
 				int a = 255;
-				int r = 255;
-				int g = 0;
-				int b = 0;
-				if(sub[i-1][j-1] != 0)
+				int r;
+				int g;
+				int b;
+				if(sub[i-1][j-1] < 255)
 				{
-					r = 0;
-					g = 255;
+					r = sub[i-1][j-1];
+					g = 0;
+					b = 0;
+				}
+				else
+				{
+					r = 255;
+					g = sub[i-1][j-1] - 255;
 					b = 0;
 				}
 				int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel
