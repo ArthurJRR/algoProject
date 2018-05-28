@@ -8,7 +8,7 @@ public class RandomImage{
 	
   public static void main(String args[])throws IOException
   {
-	 /*int[][] matrix = new int[500][500];
+	 int[][] matrix = new int[500][500];
 	 for(int i = 0; i < matrix.length; i++)
 		{
 			for(int j = 0; j < matrix[i].length; j++)
@@ -17,7 +17,7 @@ public class RandomImage{
 			}
 		}
 	 
-	 ClusterMatrix cluster = new ClusterMatrix(matrix);*/
+	 ClusterMatrix cluster = new ClusterMatrix(matrix);
 	 
 	/* cluster.saveMatrixOnImg(cluster.getImg(), ParentMatrix.IMG_FILE_NAME);
 	 cluster.biClusterMatrix();
@@ -39,10 +39,10 @@ public class RandomImage{
 
 	 int[][] mat = MatrixFromTextFileCreator.createMatrixFromFile("bicluster_yeast");
  
-	 ChengChurch cheng = new ChengChurch(mat, 610f);
+	 ChengChurch cheng = new ChengChurch(matrix, 0.02f);
 	 cheng.saveMatrixOnImg(cheng.getImg(), "Initial_Cheng.png");
 	 cheng.deletionPhase();
-	 //cheng.additionPhase();
+	 cheng.additionPhase();
 	 cheng.saveMatrixOnImg(cheng.getImg2(), "After_cheng.png");
 	 System.out.println("Submatrix");
 	 System.out.println("");
@@ -60,16 +60,16 @@ public class RandomImage{
 				int r;
 				int g;
 				int b;
-				if(sub[i-1][j-1] < 255)
+				if(sub[i-1][j-1] <= 0)
 				{
-					r = sub[i-1][j-1];
+					r = 255;
 					g = 0;
 					b = 0;
 				}
 				else
 				{
-					r = 255;
-					g = sub[i-1][j-1] - 255;
+					r = 0;
+					g = 255;
 					b = 0;
 				}
 				int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel

@@ -102,7 +102,7 @@ public class ChengChurch extends ParentMatrix
 		float result = 0;
 		for(int i = 0; i < numberOfActiveRows; i++)
 		{
-			result += calculateResiduScoreElement(i, j);
+			result += Math.abs(calculateResiduScoreElement(i, j));
 		}
 		result = result / numberOfActiveRows;
 		//System.out.println("Score résidu de la colonne " + j + " : " + result);
@@ -115,7 +115,7 @@ public class ChengChurch extends ParentMatrix
 		float result = 0;
 		for(int j = 0; j < numberOfActiveColumns; j++)
 		{
-			result += calculateResiduScoreElement(i, j);
+			result += Math.abs(calculateResiduScoreElement(i, j));
 		}
 		result = result / numberOfActiveColumns;
 		//System.out.println("Score résidu de la ligne " + i + " : " + result);
