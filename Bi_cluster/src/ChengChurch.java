@@ -1,4 +1,7 @@
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.util.Scanner;
 
 public class ChengChurch extends ParentMatrix
 {
@@ -134,7 +137,7 @@ public class ChengChurch extends ParentMatrix
 			for(int i = 0; i < numberOfActiveRows; i++)
 			{
 				float score = calculateRowResiduScore(i);
-				if(Math.exp(score) > Math.exp(maxRowScore))
+				if((score) >(maxRowScore))
 				{
 					maxRowScore = score;
 					maxRowIndex = i;
@@ -144,14 +147,14 @@ public class ChengChurch extends ParentMatrix
 			for(int j = 0; j < numberOfActiveColumns; j++)
 			{
 				float score = calculateColumnResiduScore(j);
-				if(Math.exp(score) > Math.exp(maxColumnScore))
+				if(score > (maxColumnScore))
 				{
 					maxColumnScore = score;
 					maxColumnIndex = j;
 				}
 			}
 			
-			if(Math.exp(maxColumnScore) > Math.exp(maxRowScore))
+			if((maxColumnScore) >= (maxRowScore))
 			{
 				swapColumns(maxColumnIndex, numberOfActiveColumns - 1);
 				numberOfActiveColumns -= 1;
@@ -168,52 +171,35 @@ public class ChengChurch extends ParentMatrix
 		}
 	}
 	
-	public void additionPhase() {
-		/*int ghostNumberOfActiveColumns= numberOfActiveColumns;
-		int ghostNumberOfActiveRows= numberOfActiveRows;*/
+	public void additionPhase() 
+	{
+		precalculateUsefulValues();
+		residuScoreMatrix = calculateResiduScoreMatrix();
 		
-		while(residuScoreMatrix<threshold) {//not sure
-			/*numberOfActiveColumns= ghostNumberOfActiveColumns;
-			numberOfActiveRows=ghostNumberOfActiveRows;*/
-			
-			float maxRowScore=-10;
-			int maxRowIndex=0;
-			
-			float maxColumnScore=-10;
-			int maxColumnIndex=0;
-			
-			for(int i = numberOfActiveRows; i < matrix.length; i++)
+		for(int j = numberOfActiveColumns; j < matrix[0].length; j++)
+		{
+			if(calculateColumnSquareScoreElement(j) < residuScoreMatrix)
 			{
-				System.out.println("R"+i);
-				float score = calculateRowResiduScore(i);
-				System.out.println(score);
-				if(Math.exp(score) > Math.exp(maxRowScore))
-				{
-					maxRowScore = score;
-					maxRowIndex = i;
-				}
-			}
-			
-			for(int j = numberOfActiveColumns; j < matrix[0].length; j++)
-			{
-				System.out.println("V"+j);
-				float score = calculateColumnResiduScore(j);
-				System.out.println(score);
-				if(Math.exp(score) > Math.exp(maxColumnScore))
-				{
-					maxColumnScore = score;
-					maxColumnIndex = j;
-				}
-			}
-			if(Math.exp(maxColumnScore) > Math.exp(maxRowScore)) {
-				swapRows(maxRowIndex, numberOfActiveRows-1);//pas sûr du -1
-				numberOfActiveRows += 1;
-			}
-			else {
-				swapColumns(maxColumnIndex, numberOfActiveColumns-1);//pas sûr du -1
+				swapRows(j, numberOfActiveColumns);
 				numberOfActiveColumns += 1;
+				System.out.println("Addition columns ! : swapped " + j + " with " + numberOfActiveColumns);
 			}
 		}
+		
+		precalculateUsefulValues();
+		residuScoreMatrix = calculateResiduScoreMatrix();
+		
+		for(int i = numberOfActiveRows; i < matrix.length; i++)
+		{
+			if(calculateRowSquareScoreElement(i) < residuScoreMatrix)
+			{
+				swapColumns(i, numberOfActiveRows);
+				numberOfActiveRows += 1;
+				System.out.println("Addition rows ! : swapped " + i + " with " + numberOfActiveRows);
+			}
+		}
+		
+		
 	}
 	
 	/**
@@ -305,4 +291,37 @@ public class ChengChurch extends ParentMatrix
 			columnSubsetAverage[j] = calculateColumnSubsetAverage(j);
 		}
 	}
+	
+	
+	/**
+	 * Used in the addition phase only
+	 * @param i
+	 * @return
+	 */
+	private float calculateRowSquareScoreElement(int i)
+	{
+		float result = 0;
+		for(int j = 0; j < numberOfActiveColumns; j++)
+		{
+			result += Math.pow(matrix[i][j] - rowSubsetAverage[i] - columnSubsetAverage[j] + subMatrixAverage, 2);
+		}
+		
+		return result / numberOfActiveColumns;
+	}
+	/**
+	 * Used in the Addition phase only
+	 * @param j
+	 * @return
+	 */
+	private float calculateColumnSquareScoreElement(int j)
+	{
+		float result = 0;
+		for(int i = 0; i < numberOfActiveRows; i++)
+		{
+			result += Math.pow(matrix[i][j] - rowSubsetAverage[i] - columnSubsetAverage[j] + subMatrixAverage, 2);
+		}
+		return result / numberOfActiveRows;
+	}
+	
+	
 }
