@@ -121,15 +121,16 @@ public class ChengChurch extends ParentMatrix
 	{
 		precalculateUsefulValues();
 		residuScoreMatrix = calculateResiduScoreMatrix();
-		int maxRowIndex = 0;
-		float maxRowScore = 0;
 		
-		int maxColumnIndex = 0;
-		float maxColumnScore = 0;
 		System.out.println(residuScoreMatrix);
 		while(residuScoreMatrix > threshold)
 		{
 			precalculateUsefulValues();
+			int maxRowIndex = 0;
+			float maxRowScore = -10;
+			
+			int maxColumnIndex = 0;
+			float maxColumnScore = -10;
 			for(int i = 0; i < numberOfActiveRows; i++)
 			{
 				float score = calculateRowResiduScore(i);
