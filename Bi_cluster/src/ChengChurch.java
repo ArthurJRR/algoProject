@@ -266,4 +266,18 @@ public class ChengChurch extends ParentMatrix
 		}
 	}
 
+	
+	public int[][] getSubMatrix()
+	{
+		int[][] sub = new int[numberOfActiveRows][numberOfActiveColumns];
+		for(int i = 0; i < numberOfActiveRows; i++)
+		{
+			for(int j = 0; j < numberOfActiveColumns; j++)
+			{
+				sub[i][j] = matrix[i][j];
+			}
+		}
+		
+		return sub;
+	}
 }
