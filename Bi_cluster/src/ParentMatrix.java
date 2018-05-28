@@ -22,14 +22,14 @@ public class ParentMatrix
 			for(int j = 1; j <= matrix[i-1].length; j++)
 			{
 				int a = 255;
-				int r = 0;
+				int r = 255;
 				int g = 0;
 				int b = 0;
 				if(matrix[i-1][j-1] != 0)
 				{
-					r = 255;
+					r = 0;
 					g = 255;
-					b = 255;
+					b = 0;
 				}
 				int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel
 				for(int k = 0; k < PIXEL_HEIGHT; k++)

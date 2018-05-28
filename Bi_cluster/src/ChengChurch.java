@@ -6,7 +6,10 @@ public class ChengChurch extends ParentMatrix
 	private int numberOfActiveColumns;
 	private int numberOfActiveRows;
 	private float threshold;
-	private float residuScoreMatrix;;
+	private float residuScoreMatrix;
+	private float subMatrixAverage;
+	private float[] rowSubsetAverage;
+	private float[] columnSubsetAverage;
 	
 	public ChengChurch(int[][] matrix, float threshold)
 	{
@@ -14,7 +17,8 @@ public class ChengChurch extends ParentMatrix
 		this.threshold = threshold;
 		this.numberOfActiveRows = matrix.length;
 		this.numberOfActiveColumns = matrix[0].length;
-		this.residuScoreMatrix= calculateResiduScoreMatrix();
+		rowSubsetAverage = new float[numberOfActiveRows];
+		columnSubsetAverage = new float[numberOfActiveColumns];
 		img = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	    img2 = new BufferedImage(matrix[0].length*PIXEL_HEIGHT, matrix.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 	}
@@ -67,9 +71,9 @@ public class ChengChurch extends ParentMatrix
 	private float calculateResiduScoreElement(int i, int j)
 	{
 		int element = matrix[i][j];
-		float columnSubAverage = calculateColumnSubsetAverage(j);
-		float rowSubAverage = calculateRowSubsetAverage(i);
-		float subMatrixAverage = calculateSubmatrixAverage();
+		float columnSubAverage = columnSubsetAverage[j];
+		float rowSubAverage = rowSubsetAverage[i];
+		float subMatrixAverage = this.subMatrixAverage;
 		return element - columnSubAverage - rowSubAverage + subMatrixAverage;
 	}
 	
@@ -115,15 +119,18 @@ public class ChengChurch extends ParentMatrix
 	
 	public void deletionPhase()
 	{
+		precalculateUsefulValues();
 		residuScoreMatrix = calculateResiduScoreMatrix();
-		int maxRowIndex = 0;
-		float maxRowScore = 0;
 		
-		int maxColumnIndex = 0;
-		float maxColumnScore = 0;
 		System.out.println(residuScoreMatrix);
 		while(residuScoreMatrix > threshold)
 		{
+			precalculateUsefulValues();
+			int maxRowIndex = 0;
+			float maxRowScore = -10;
+			
+			int maxColumnIndex = 0;
+			float maxColumnScore = -10;
 			for(int i = 0; i < numberOfActiveRows; i++)
 			{
 				float score = calculateRowResiduScore(i);
@@ -156,6 +163,7 @@ public class ChengChurch extends ParentMatrix
 			}
 			
 			residuScoreMatrix = calculateResiduScoreMatrix();
+			System.out.println("H " + residuScoreMatrix);
 			
 		}
 	}
@@ -279,5 +287,22 @@ public class ChengChurch extends ParentMatrix
 		}
 		
 		return sub;
+	}
+	
+	/**
+	 * Used to precalculate the subMatrixAverage, the rowSubsetAverages and the columnSubsetAverages
+	 * They are then stored to avoid calculating them more than once
+	 */
+	private void precalculateUsefulValues()
+	{
+		subMatrixAverage = calculateSubmatrixAverage();
+		for(int i = 0; i < numberOfActiveRows; i++)
+		{
+			rowSubsetAverage[i] = calculateRowSubsetAverage(i);
+		}
+		for(int j = 0; j < numberOfActiveColumns; j++)
+		{
+			columnSubsetAverage[j] = calculateColumnSubsetAverage(j);
+		}
 	}
 }
