@@ -38,7 +38,7 @@ public class RandomImage{
   			 {1,1,1,0,0,1,0,1,0,0}};
 
  
-	 ChengChurch cheng = new ChengChurch(matrix2, 0.10f);
+	 ChengChurch cheng = new ChengChurch(matrix2, 0.11f);
 	 cheng.saveMatrixOnImg(cheng.getImg(), "Initial_Cheng.png");
 	 cheng.deletionPhase();
 	 //cheng.additionPhase();
