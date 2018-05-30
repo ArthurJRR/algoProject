@@ -11,7 +11,7 @@ public class ParentMatrix
 	protected BufferedImage img;
     protected BufferedImage img2;
     
-    protected static final int PIXEL_HEIGHT = 10;
+    protected static final int PIXEL_HEIGHT = 5;
     public static final String IMG_FILE_NAME = "Matrix.png";
     public static final String IMG2_FILE_NAME = "Result.png";
     
@@ -64,5 +64,16 @@ public class ParentMatrix
 	{
 		return img2;
 	}
+	
+	public int[][] getMatrix()
+	{
+		return matrix;
+	}
+	
+	
+	
+	
+	
+	
 
 }
